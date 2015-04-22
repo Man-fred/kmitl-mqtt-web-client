@@ -29,4 +29,5 @@ This web client development with the [KMITL MQTT broker](http:://gis.it.kmitl.ac
 ## Can I embedd it / ship it with my software?
 
 We are fork from [HiveMQ Web Client](https://github.com/hivemq/hivemq-mqtt-web-client "HiveMQ Web Client")
-Sure! We would however be very glad if you would honor the work by linking to the original client source or mentioning that this websocket client was developed initially for HiveMQs websocket support.
+
+And HiveMQ says!, "Sure! We would however be very glad if you would honor the work by linking to the original client source or mentioning that this websocket client was developed initially for HiveMQs websocket support."
