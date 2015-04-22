@@ -1,2 +1,2 @@
-websocketserver = 'broker.mqttdashboard.com';
-websocketport = 8000;
+websocketserver = 'gis.it.kmitl.ac.th';
+websocketport = 3000;
