@@ -21,7 +21,6 @@
     float: none;
     margin: 0 auto;
     padding: 0;
-    height: 80px;
     background-color: #f2f2f2;
     border-bottom: solid 2px #000000;
     margin-bottom: 20px;
@@ -41,6 +40,10 @@
     margin: 0 auto;
 }
 
+#header > div > h1{
+    font-size: 2em;
+}
+
 #headertitle {
     float: right;
     margin-top: 30px;
@@ -48,8 +51,11 @@
 }
 
 #headerlogo {
-    margin-left: 20px;
-    margin-top: 5px;
+    height: 24px;
+}
+
+#faculty-logo{
+    height: 64px;
 }
 
 .conniTop {
