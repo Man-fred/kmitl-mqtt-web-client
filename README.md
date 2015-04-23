@@ -6,7 +6,7 @@ hivemq-mqtt-web-client
 Client นี้สามารถทำงานได้บนเว็บเบราเซอร์สมัยใหม่ที่สนับสนุน WebSockets (sorry Internet Explorer <10!).
 
 ทดลองใช้งานได้ที่ [KMITL MQTT Dashboard](http://www.gis.it.kmitl.ac.th "KMITL MQTT Dashboard")
-หรือ Donwload เพื่อรันบน localhost
+หรือ [Donwload](https://github.com/saranonuan/kmitl-mqtt-web-client/archive/master.zip) เพื่อใช้งานบน localhost
 
 ### MQTT Broker
 
