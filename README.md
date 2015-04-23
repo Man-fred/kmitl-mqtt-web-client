@@ -1,30 +1,25 @@
 hivemq-mqtt-web-client
 ======================
 
-## A websockets based MQTT Client for your browser.
+### A websockets based MQTT Client สำหรับใช้งานบน WebBrowser.
 
-This client runs on any modern browser, which supports websockets (sorry Internet Explorer <10!).
-You can use it to publish and subscribe at the same time.
+Client นี้สามารถทำงานได้บนเว็บเบราเซอร์สมัยใหม่ที่สนับสนุน WebSockets (sorry Internet Explorer <10!).
 
-See it in action at [KMITL MQTT Dashboard](http://www.gis.it.kmitl.ac.th "KMITL MQTT Dashboard")
+ทดลองใช้งานได้ที่ [KMITL MQTT Dashboard](http://www.gis.it.kmitl.ac.th "KMITL MQTT Dashboard")
+หรือ [Donwload](https://github.com/saranonuan/kmitl-mqtt-web-client/archive/master.zip) เพื่อใช้งานบน localhost
 
-## How to use it
+### MQTT Broker
 
-Read the blog post about ["A full-featured MQTT client for your browser"](http://www.hivemq.com/full-featured-mqtt-client-browser/ "A full-featured MQTT client for your browser")
-
-
-## Localhost / Local network
-
-You can also use this client to connect to a broker on your local machine ("localhost") or any machine in your local network which is reachable from the machine which your browser runs on.
-
-## MQTT Broker
-
-This web client development with the [KMITL MQTT broker](http:://gis.it.kmitl.ac.th/ "KMITL MQTT broker") with enabled websockets.
-
+Web client นี้พัฒนาเพื่อใช้งานกับ [KMITL MQTT broker](http:://gis.it.kmitl.ac.th/ "KMITL MQTT broker")
 * Host: **gis.it.kmitl.ac.th**
 * MQTT port: **1883**
 * Websockets port: **3000**
 * SOAP port: **3001**
+
+### คำถามที่พบบ่อย / Code ตัวอย่าง
+[WIKI PAGE](https://github.com/saranonuan/kmitl-mqtt-web-client/wiki)
+* [ต่อ Arduino ภายในอินเตอร์เน็ตสถาบัน อย่างไร ?](https://github.com/saranonuan/kmitl-mqtt-web-client/wiki/How-to-connect-arduino-with-kmitl-network)
+* [Code ตัวอย่าง การต่อ Arduino กับ MQTT Broker](https://github.com/saranonuan/kmitl-mqtt-web-client/wiki/How-to-connect-mqtt)
 
 ## Can I embedd it / ship it with my software?
 
