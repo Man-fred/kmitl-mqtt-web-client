@@ -33,7 +33,7 @@ limitations under the License.
 
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/foundation.css">
+    <link rel="stylesheet" href="css/foundation.min.css">
     <link rel="stylesheet" href="css/jquery.minicolors.css">
     <link rel="stylesheet" href="css/jquery.fancybox.min.css">
 </head>
@@ -45,6 +45,39 @@ limitations under the License.
     </div>
 </div>
 <div id="content" class="row">
+    <form>
+    <div id="saved" class="row large-12 columns">
+
+        <div class="large-8 columns savedTop">
+            <h3>Saved Connections</h3>
+        </div>
+
+        <div class="large-3 columns savedArrow">
+            <a class="small bottom savedArrow" onclick="websocketclient.render.toggle('saved');">
+                <div class="icon-arrow-chevron"></div>
+            </a>
+        </div>
+        <div class="large-12 columns" id="savedMain">
+            <div class="panel">
+                <div class="row">
+                        <div class="large-5 columns">
+                            <label>Host *</label>
+								<select id="urlInputSaved">
+									<option value="a">bitte auswählen</option>
+								</select>
+							
+                        </div>
+                        <div class="large-1 columns">
+                            <a id="loadButton" class="small button" onclick="websocketclient.load();">Load</a>
+                        </div>
+                        <div class="large-1 columns">
+                            <a id="loadConnectButton" class="small button" onclick="websocketclient.loadConnect();">Connect</a>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="empty"></div>
     <div id="connection" class="row large-12 columns">
 
         <div class="large-8 columns conniTop">
@@ -63,7 +96,6 @@ limitations under the License.
         <div class="large-12 columns" id="conniMain">
             <div class="panel">
                 <div class="row">
-                    <form class="custom">
                         <div class="large-5 columns">
                             <label>Host *</label>
                             <input id="urlInput" type="text" value="broker.mqttdashboard.com">
@@ -81,6 +113,9 @@ limitations under the License.
 
                         <div class="large-2 columns">
                             <a id="connectButton" class="small button" onclick="websocketclient.connect();">Connect</a>
+                        </div>
+                        <div class="large-2 columns">
+                            <a id="saveButton" class="small button" onclick="websocketclient.save();">Save</a>
                         </div>
 
                         <div class="large-2 columns">
@@ -104,8 +139,10 @@ limitations under the License.
                         </div>
 
                         <div class="large-1 columns">
-                            <label>SSL</label>
+							<label>SSL</label>
+                            <div class="switch">
                             <input id="sslInput" type="checkbox"/>
+							</div>
                         </div>
 
                         <div class="large-2 columns">
@@ -137,7 +174,6 @@ limitations under the License.
                             <label>Last-Will Messsage</label>
                             <textarea id="LWMInput"></textarea>
                         </div>
-                    </form>
                 </div>
             </div>
         </div>
@@ -291,6 +327,7 @@ limitations under the License.
             </div>
         </div>
     </div>
+                    </form>
 </div>
 
 <div class="clearing-container text-center">
@@ -304,7 +341,7 @@ limitations under the License.
 <script src="js/jquery.fancybox.min.js"></script>
 
 <script src="js/foundation.min.js"></script>
-<script src="js/foundation.forms.min.js"></script>
+<!-- scrip  t src="js/foundation.forms.min.js"></  script -->
 <script src="js/modernizr.min.js"></script>
 <script src="js/moment.min.js"></script>
 <script src="js/jquery.minicolors.min.js"></script>
@@ -328,7 +365,11 @@ limitations under the License.
 
         $('#urlInput').val(websocketserver);
         $('#portInput').val(websocketport);
-        $('#clientIdInput').val('clientId-' + randomString(10));
+		if (!websocketclientid) {
+			websocketclientid = 'webclient-';
+		}
+		$('#clientIdInput').val(websocketclientid + randomString(10));
+		
 
         $('#colorChooser').minicolors();
 
@@ -338,7 +379,11 @@ limitations under the License.
                 $("#colorChooser").minicolors('value', rndColor);
             }
         });
-
+		if (websocketclient.getSaved()) {
+			websocketclient.render.toggle('conni');
+		} else {
+			websocketclient.render.toggle('saved');
+		}
         websocketclient.render.toggle('publish');
         websocketclient.render.toggle('messages');
         websocketclient.render.toggle('sub');

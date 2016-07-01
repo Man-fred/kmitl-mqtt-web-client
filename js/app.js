@@ -18,51 +18,128 @@
 
 var websocketclient = {
     'client': null,
+	'connection': new Object,
     'lastMessageId': 1,
     'lastSubId': 1,
     'subscriptions': [],
     'messages': [],
     'connected': false,
 
-    'connect': function () {
+    'getConnection': function () {
+		//var connection = {};
+        this.connection.host = $('#urlInput').val();
+        this.connection.port = parseInt($('#portInput').val(), 10);
+        this.connection.clientId = $('#clientIdInput').val();
+        this.connection.username = $('#userInput').val();
+        this.connection.password = $('#pwInput').val();
+        this.connection.keepAlive = parseInt($('#keepAliveInput').val());
+        this.connection.cleanSession = $('#cleanSessionInput').is(':checked');
+        this.connection.lwTopic = $('#lwTopicInput').val();
+        this.connection.lwQos = parseInt($('#lwQosInput').val());
+        this.connection.lwRetain = $('#LWRInput').is(':checked');
+        this.connection.lwMessage = $('#LWMInput').val();
+        this.connection.ssl = $('#sslInput').is(':checked');
 
-        var host = $('#urlInput').val();
-        var port = parseInt($('#portInput').val(), 10);
-        var clientId = $('#clientIdInput').val();
-        var username = $('#userInput').val();
-        var password = $('#pwInput').val();
-        var keepAlive = parseInt($('#keepAliveInput').val());
-        var cleanSession = $('#cleanSessionInput').is(':checked');
-        var lwTopic = $('#lwTopicInput').val();
-        var lwQos = parseInt($('#lwQosInput').val());
-        var lwRetain = $('#LWRInput').is(':checked');
-        var lwMessage = $('#LWMInput').val();
-        var ssl = $('#sslInput').is(':checked');
+		//return connection;
+	},
 
-        this.client = new Messaging.Client(host, port, clientId);
+    'getSaved': function () {
+		var sel = $('#urlInputSaved');
+		sel.length = 0;
+		var i = 0;
+		var result = false;
+		var savedKey = localStorage.key(i++)
+		while (savedKey) {
+			if (savedKey && savedKey.includes('_mqtt_') ) {
+				var saved = localStorage.getItem(savedKey);
+				try {
+					var connection = JSON.parse(saved);
+				} finally {}
+				if (connection) {
+					//sel[sel.length] = new Option(connection.host, connection.host);
+					$("<option/>").val(connection.host).text(connection.host).appendTo("#urlInputSaved");
+					result = true;
+				}
+			}
+			savedKey = localStorage.key(i++)
+		}
+					//sel[sel.length] = new Option('test', 'Test');
+		return result;
+	},
+	
+    'save': function () {
+		this.getConnection();
+		var test = JSON.stringify(this.connection);
+		localStorage.setItem('_mqtt_'+this.connection.host, JSON.stringify(this.connection));
+		this.getSaved();
+	},
+
+	'loadConnect': function() {
+		if (this.load()) {
+			this.connect();
+			websocketclient.render.show('conni');
+			websocketclient.render.hide('saved');
+		}
+	},
+	
+    'load': function () {
+		var connection;
+		var saved = localStorage.getItem('_mqtt_'+$('#urlInputSaved').val())
+		try {
+			connection = JSON.parse(saved);
+		} finally {}
+		if (connection && connection.host) {
+			$('#urlInput').val(connection.host);
+			$('#portInput').val(connection.port);
+			$('#clientIdInput').val(connection.clientId);
+			$('#userInput').val(connection.username);
+			$('#pwInput').val(connection.password);
+			$('#keepAliveInput').val(connection.keepAlive);
+			$('#cleanSessionInput').prop('checked', connection.cleanSession);
+			$('#lwTopicInput').val(connection.lwTopic);
+			$('#lwQosInput').val(connection.lwQos);
+			$('#LWRInput').prop('checked', connection.lwRetain);
+			$('#LWMInput').val(connection.lwMessage);
+			$('#sslInput').prop('checked', connection.ssl);
+			/*if (!connection.subscriptions) {
+				connection.subscriptions = [];
+			}*/
+			this.connection = connection;
+			this.render.show('conni');
+			this.render.hide('saved');
+			return true;
+		} else {
+			return false;
+		}
+	},
+
+	'connect': function () {
+		this.getConnection();
+
+        this.client = new Messaging.Client(this.connection.host, this.connection.port, this.connection.clientId);
         this.client.onConnectionLost = this.onConnectionLost;
         this.client.onMessageArrived = this.onMessageArrived;
 
         var options = {
             timeout: 3,
-            keepAliveInterval: keepAlive,
-            cleanSession: cleanSession,
-            useSSL: ssl,
+            keepAliveInterval: this.connection.keepAlive,
+            cleanSession: this.connection.cleanSession,
+            useSSL: this.connection.ssl,
             onSuccess: this.onConnect,
             onFailure: this.onFail
         };
 
-        if (username.length > 0) {
-            options.userName = username;
+        if (this.connection.username.length > 0) {
+            options.userName = this.connection.username;
         }
-        if (password.length > 0) {
-            options.password = password;
+        if (this.connection.password.length > 0) {
+            options.password = this.connection.password;
         }
-        if (lwTopic.length > 0) {
-            var willmsg = new Messaging.Message(lwMessage);
-            willmsg.qos = lwQos;
-            willmsg.destinationName = lwTopic;
-            willmsg.retained = lwRetain;
+        if (this.connection.lwTopic.length > 0) {
+            var willmsg = new Messaging.Message(this.connection.lwMessage);
+            willmsg.qos = this.connection.lwQos;
+            willmsg.destinationName = this.connection.lwTopic;
+            willmsg.retained = this.connection.lwRetain;
             options.willMessage = willmsg;
         }
 
@@ -78,6 +155,12 @@ var websocketclient = {
         websocketclient.render.show('publish');
         websocketclient.render.show('sub');
         websocketclient.render.show('messages');
+		if (websocketclient.connection.subscriptions) {
+			websocketclient.render.subscriptions();
+			_.forEach(websocketclient.connection.subscriptions, function (subs) {
+				websocketclient.client.subscribe(subs.topic, {qos: subs.qos, onSuccess: websocketclient.subscribeSuccess, onFailure: websocketclient.subscribeFailure,timeout: 10, invocationContext: {'Source': "new"}});
+			});
+		}
     },
 
     'onFail': function (message) {
@@ -102,13 +185,10 @@ var websocketclient = {
         websocketclient.render.clearMessages();
 
         //Cleanup subscriptions
-        websocketclient.subscriptions = [];
         websocketclient.render.clearSubscriptions();
     },
 
     'onMessageArrived': function (message) {
-//        console.log("onMessageArrived:" + message.payloadString + " qos: " + message.qos);
-
         var subscription = websocketclient.getSubscriptionForTopic(message.destinationName);
 
         var messageObj = {
@@ -121,7 +201,7 @@ var websocketclient = {
             'color': websocketclient.getColorForSubscription(subscription.id)
         };
 
-        console.log(messageObj);
+        //console.log(messageObj);
         messageObj.id = websocketclient.render.message(messageObj);
         websocketclient.messages.push(messageObj);
     },
@@ -155,27 +235,38 @@ var websocketclient = {
             websocketclient.render.showError("Topic cannot be empty");
             return false;
         }
-
-        if (_.find(this.subscriptions, { 'topic': topic })) {
-            websocketclient.render.showError('You are already subscribed to this topic');
-            return false;
-        }
-
-        this.client.subscribe(topic, {qos: qosNr});
+		if (this.connection.subscriptions) {
+			if (_.find(this.connection.subscriptions, { 'topic': topic })) {
+				websocketclient.render.showError('You are already subscribed to this topic');
+				return false;
+			}
+		} else {
+			this.connection.subscriptions = [];
+		}
+        this.client.subscribe(topic, {qos: qosNr, onSuccess: this.subscribeSuccess, onFailure: this.subscribeFailure,timeout: 10, invocationContext: {'Source': "new"}});
         if (color.length < 1) {
             color = '999999';
         }
 
         var subscription = {'topic': topic, 'qos': qosNr, 'color': color};
         subscription.id = websocketclient.render.subscription(subscription);
-        this.subscriptions.push(subscription);
+        this.connection.subscriptions.push(subscription);
         return true;
     },
-
+	
+	'subscribeSuccess': function(erg) {
+		websocketclient.render.showSuccess('Ok: '+erg.invocationContext.Source);
+		console.log(erg);
+	},
+	
+	'subscribeFailure': function(erg) {
+		console.log(erg);
+	},
+	
     'unsubscribe': function (id) {
-        var subs = _.find(websocketclient.subscriptions, {'id': id});
+        var subs = _.find(websocketclient.connection.subscriptions, {'id': id});
         this.client.unsubscribe(subs.topic);
-        websocketclient.subscriptions = _.filter(websocketclient.subscriptions, function (item) {
+        websocketclient.connection.subscriptions = _.filter(websocketclient.connection.subscriptions, function (item) {
             return item.id != id;
         });
 
@@ -200,9 +291,9 @@ var websocketclient = {
 
     'getSubscriptionForTopic': function (topic) {
         var i;
-        for (i = 0; i < this.subscriptions.length; i++) {
-            if (this.compareTopics(topic, this.subscriptions[i].topic)) {
-                return this.subscriptions[i];
+        for (i = 0; i < this.connection.subscriptions.length; i++) {
+            if (this.compareTopics(topic, this.connection.subscriptions[i].topic)) {
+                return this.connection.subscriptions[i];
             }
         }
         return false;
@@ -219,7 +310,7 @@ var websocketclient = {
                 return '99999';
             }
 
-            var sub = _.find(this.subscriptions, { 'id': id });
+            var sub = _.find(this.connection.subscriptions, { 'id': id });
             if (!sub) {
                 return '999999';
             } else {
@@ -239,6 +330,9 @@ var websocketclient = {
     'render': {
 
         'showError': function (message) {
+            alert(message);
+        },
+        'showSuccess': function (message) {
             alert(message);
         },
         'messages': function () {
@@ -274,7 +368,7 @@ var websocketclient = {
 
         'subscriptions': function () {
             websocketclient.render.clearSubscriptions();
-            _.forEach(websocketclient.subscriptions, function (subs) {
+            _.forEach(websocketclient.connection.subscriptions, function (subs) {
                 subs.id = websocketclient.render.subscription(subs);
             });
         },

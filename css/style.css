@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Copyright 2013 dc-square GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -56,6 +56,12 @@
 
 #faculty-logo{
     height: 64px;
+}
+
+.savedTop {
+    margin-left: 15px;
+    background-color: #f2f2f2;
+    width: 180px;
 }
 
 .conniTop {
@@ -232,7 +238,7 @@ form.custom .custom.checkbox {
     margin-top: 10px;
 }
 
-#connection, #publish-sub {
+#saved, #connection, #publish-sub {
     width: 100%;
 }
 
