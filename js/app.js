@@ -347,19 +347,28 @@ var websocketclient = {
 
             var largest = websocketclient.lastMessageId++;
 
-            var html = '<li class="messLine id="' + largest + '">' +
-                '   <div class="row large-12 mess' + largest + '" style="border-left: solid 10px #' + message.color + '; ">' +
-                '       <div class="large-12 columns messageText">' +
-                '           <div class="large-3 columns date">' + message.timestamp.format("YYYY-MM-DD HH:mm:ss") + '</div>' +
-                '           <div class="large-5 columns topicM truncate" id="topicM' + largest + '" title="' + Encoder.htmlEncode(message.topic, 0) + '">Topic: ' + Encoder.htmlEncode(message.topic) + '</div>' +
-                '           <div class="large-2 columns qos">Qos: ' + message.qos + '</div>' +
-                '           <div class="large-2 columns retain">';
+            var html = '<li class="messLine messageText id="' + largest + '">' +
+                '   <div class="row mess' + largest + '" style="border-left: solid 10px #' + message.color + '; ">' +
+                '      <div class="small-8 columns">' +
+                '         <div class="row">' +
+                '            <div class="small-12 large-6 columns date">' + message.timestamp.format("YYYY-MM-DD HH:mm:ss") + '</div>' +
+                '            <div class="small-12 large-6 columns topicM truncate" id="topicM' + largest + 
+                '" title="' + Encoder.htmlEncode(message.topic, 0) + '">Topic: ' + Encoder.htmlEncode(message.topic) + '</div>' +
+                '         </div>' +
+                '      </div>' +
+                '      <div class="small-4 columns">' +
+                '         <div class="row">' +
+                '            <div class="small-12 large-6 columns qos">Qos: ' + message.qos + '</div>' +
+                '            <div class="small-12 large-6 columns retain">';
             if (message.retained) {
                 html += 'Retained';
             }
-            html += '           </div>' +
-                '           <div class="large-12 columns message break-words">' + Encoder.htmlEncode(message.payload) + '</div>' +
-                '       </div>' +
+            html += '        </div>' +
+                '         </div>' +
+                '      </div>' +
+                '   </div>' +
+                '   <div class="row mess' + largest + '" style="border-left: solid 10px #' + message.color + '; ">' +
+                '           <div class="small-12 columns message break-words">' + Encoder.htmlEncode(message.payload) + '</div>' +
                 '   </div>' +
                 '</li>';
             $("#messEdit").prepend(html);
@@ -377,14 +386,12 @@ var websocketclient = {
             var largest = websocketclient.lastSubId++;
             $("#innerEdit").append(
                 '<li class="subLine" id="sub' + largest + '">' +
-                    '   <div class="row large-12 subs' + largest + '" style="border-left: solid 10px #' + subscription.color + '; background-color: #ffffff">' +
-                    '       <div class="large-12 columns subText">' +
-                    '           <div class="large-1 columns right closer">' +
+                    '   <div class="row subText subs' + largest + '" style="border-left: solid 10px #' + subscription.color + '; background-color: #ffffff">' +
+                    '           <div class="small-1 column right closer">' +
                     '              <a href="#" onclick="websocketclient.deleteSubscription(' + largest + '); return false;">x</a>' +
                     '           </div>' +
-                    '           <div class="qos">Qos: ' + subscription.qos + '</div>' +
-                    '           <div class="topic truncate" id="topic' + largest + '" title="' + Encoder.htmlEncode(subscription.topic, 0) + '">' + Encoder.htmlEncode(subscription.topic) + '</div>' +
-                    '       </div>' +
+                    '           <div class="small-4 columns qos">Qos: ' + subscription.qos + '</div>' +
+                    '           <div class="small-6 columns topic truncate" id="topic' + largest + '" title="' + Encoder.htmlEncode(subscription.topic, 0) + '">' + Encoder.htmlEncode(subscription.topic) + '</div>' +
                     '   </div>' +
                     '</li>');
             return largest;

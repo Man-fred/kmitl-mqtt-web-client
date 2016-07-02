@@ -26,7 +26,7 @@ limitations under the License.
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
     <meta property="og:url" content="http://gis.it.kmitl.ac.th">
-    <meta property="og:title" content="MQTT Broker | IT KMITL">
+    <meta property="og:title" content="MQTT Broker">
     <meta property="og:image" content="http://gis.it.kmitl.ac.th/assets/fb-image.jpg">
 
     <title>MQTT Broker | IT KMITL</title>
@@ -41,61 +41,30 @@ limitations under the License.
 
 <div id="header">
     <div>
-        <h1><img id="faculty-logo" src="assets/itkmitl.jpg"> MQTT Broker</h1>
+        <h1><img id="faculty-logo" src="assets/mqtt-org.jpg"> MQTT Broker</h1>
     </div>
 </div>
-<div id="content" class="row">
-    <form>
-    <div id="saved" class="row large-12 columns">
+<div id="content">
+    <div class="row">
+        <div class="small-12 large-8 columns">
+            <div id="connection" class="row conniTop">
 
-        <div class="large-8 columns savedTop">
-            <h3>Saved Connections</h3>
-        </div>
+                <div class="small-8 columns">
+                    <h3>Connection</h3>
+                </div>
 
-        <div class="large-3 columns savedArrow">
-            <a class="small bottom savedArrow" onclick="websocketclient.render.toggle('saved');">
-                <div class="icon-arrow-chevron"></div>
-            </a>
-        </div>
-        <div class="large-12 columns" id="savedMain">
-            <div class="panel">
-                <div class="row">
-                        <div class="large-5 columns">
-                            <label>Host *</label>
-								<select id="urlInputSaved">
-									<option value="a">bitte auswählen</option>
-								</select>
-							
-                        </div>
-                        <div class="large-1 columns">
-                            <a id="loadButton" class="small button" onclick="websocketclient.load();">Load</a>
-                        </div>
-                        <div class="large-1 columns">
-                            <a id="loadConnectButton" class="small button" onclick="websocketclient.loadConnect();">Connect</a>
-                        </div>
+                <div class="small-1 columns conniStatus">
+                    <div id="connectionStatus"></div>
+                </div>
+
+                <div class="small-2 columns conniArrow">
+                    <a class="small bottom conniArrow" onclick="websocketclient.render.toggle('conni');">
+                        <div class="icon-arrow-chevron"></div>
+                    </a>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="empty"></div>
-    <div id="connection" class="row large-12 columns">
-
-        <div class="large-8 columns conniTop">
-            <h3>Connection</h3>
-        </div>
-
-        <div class="large-1 columns conniStatus">
-            <div id="connectionStatus"></div>
-        </div>
-
-        <div class="large-2 columns conniArrow">
-            <a class="small bottom conniArrow" onclick="websocketclient.render.toggle('conni');">
-                <div class="icon-arrow-chevron"></div>
-            </a>
-        </div>
-        <div class="large-12 columns" id="conniMain">
-            <div class="panel">
-                <div class="row">
+            <div id="conniMain" class="row panel">
+            <form>
                         <div class="large-5 columns">
                             <label>Host *</label>
                             <input id="urlInput" type="text" value="broker.mqttdashboard.com">
@@ -139,10 +108,10 @@ limitations under the License.
                         </div>
 
                         <div class="large-1 columns">
-							<label>SSL</label>
+                                                        <label>SSL</label>
                             <div class="switch">
                             <input id="sslInput" type="checkbox"/>
-							</div>
+                                                        </div>
                         </div>
 
                         <div class="large-2 columns">
@@ -174,165 +143,183 @@ limitations under the License.
                             <label>Last-Will Messsage</label>
                             <textarea id="LWMInput"></textarea>
                         </div>
+                    </form>
                 </div>
+        </div>
+        <div class="small-12 large-4 columns">
+            <div id="saved" class="row savedTop">
+
+                <div class="small-8 columns">
+                    <h3>Saved Connections</h3>
+                </div>
+
+                <div class="small-2 columns conniArrow">
+                    <a class="small bottom conniArrow" onclick="websocketclient.render.toggle('saved');">
+                        <div class="icon-arrow-chevron"></div>
+                    </a>
+                </div>
+            </div>
+            <div  id="savedMain" class="row panel">
+                <form>
+                    <div class="small-7 columns">
+                        <label>Host *</label>
+                        <select id="urlInputSaved">
+                                <option value="a">bitte auswählen</option>
+                        </select>
+                    </div>
+                    <div class="small-2 columns">
+                        <a id="loadButton" class="small button" onclick="websocketclient.load();">Load</a>
+                    </div>
+                    <div class="small-2 columns">
+                        <a id="loadConnectButton" class="small button" onclick="websocketclient.loadConnect();">Connect</a>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
-    <div class="empty"></div>
-    <div id="publish-sub" class="row large-12 columns">
-        <div class="columns large-8">
-            <div class="large-9 columns publishTop">
-                <h3>Publish</h3>
-            </div>
-
-            <div class="large-3 columns publishArrow">
-                <a class="small bottom publishArrow" onclick="websocketclient.render.toggle('publish');">
-                    <div class="icon-arrow-chevron"></div>
-                </a>
-            </div>
-
-            <div class="large-12 columns" id="publishMain">
-
-                <!-- Grid Example -->
-                <div class="row panel" id="publishPanel">
-                    <div class="large-12 columns">
-                        <form class="custom">
-                            <div class="row">
-                                <div class="large-6 columns">
-                                    <label>Topic</label>
-                                    <input id="publishTopic" type="text" value="testtopic/1">
-                                </div>
-                                <div class="large-2 columns">
-                                    <label for="publishQoSInput">QoS</label>
-                                    <select id="publishQoSInput" class="small">
-                                        <option>0</option>
-                                        <option>1</option>
-                                        <option>2</option>
-                                    </select>
-                                </div>
-                                <div class="large-2 columns">
-                                    <label>Retain</label>
-                                    <input id="publishRetain" type="checkbox">
-                                </div>
-                                <div class="large-2 columns">
-                                    <a class="small button" id="publishButton"
-                                       onclick="websocketclient.publish($('#publishTopic').val(),$('#publishPayload').val(),parseInt($('#publishQoSInput').val(),10),$('#publishRetain').is(':checked'))">Publish</a>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="large-12 columns">
-                                    <label>Message</label>
-                                    <textarea id="publishPayload"></textarea>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
+    <!-- Publish / Subscribe -->
+    <div id="publish-sub" class="row">
+        <div class="large-8 columns">
+            <div class="row publishTop">
+                <div class="small-9 columns">
+                    <h3>Publish</h3>
                 </div>
+
+                <div class="small-2 columns publishArrow">
+                    <a class="small bottom publishArrow" onclick="websocketclient.render.toggle('publish');">
+                        <div class="icon-arrow-chevron"></div>
+                    </a>
+                </div>
+            </div>
+            <div class="row panel" id="publishMain">
+                <form class="custom">
+                    <div id="publishPanel">
+                        <div class="large-6 columns">
+                            <label>Topic</label>
+                            <input id="publishTopic" type="text" value="testtopic/1">
+                        </div>
+                        <div class="large-2 columns">
+                            <label for="publishQoSInput">QoS</label>
+                            <select id="publishQoSInput" class="small">
+                                <option>0</option>
+                                <option>1</option>
+                                <option>2</option>
+                            </select>
+                        </div>
+                        <div class="large-2 columns">
+                            <label>Retain</label>
+                            <input id="publishRetain" type="checkbox">
+                        </div>
+                        <div class="large-2 columns">
+                            <a class="small button" id="publishButton"
+                               onclick="websocketclient.publish($('#publishTopic').val(),$('#publishPayload').val(),parseInt($('#publishQoSInput').val(),10),$('#publishRetain').is(':checked'))">Publish</a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="large-12 columns">
+                            <label>Message</label>
+                            <textarea id="publishPayload"></textarea>
+                        </div>
+                    </div>
+                </form>
             </div>
             <div class="empty"></div>
-            <div class="large-9 columns messagesTop">
-                <h3>Messages</h3>
+            <div class="row messagesTop">
+                <div class="small-9 columns">
+                    <h3>Messages</h3>
+                </div>
+                <div class="small-2 columns messagesArrow">
+                    <a class="small bottom messagesArrow" onclick="websocketclient.render.toggle('messages');">
+                        <div class="icon-arrow-chevron"></div>
+                    </a>
+                </div>
             </div>
 
-            <div class="large-3 columns messagesArrow">
-                <a class="small bottom messagesArrow" onclick="websocketclient.render.toggle('messages');">
-                    <div class="icon-arrow-chevron"></div>
-                </a>
-            </div>
+            <div class="row panel" id="messagesMain">
+                <div class="large-12 columns">
+                    <form class="custom">
+                        <!--<div class="row">-->
+                        <!--<div class="large-10 columns">-->
+                        <!--<label>Filter</label>-->
+                        <!--<input id="filterString" type="text">-->
+                        <!--</div>-->
 
-            <div class="large-12 columns" id="messagesMain">
+                        <!--<div class="large-2 columns">-->
+                        <!--<a class="small button" id="filterButton"-->
+                        <!--onclick="websocketclient.filter($('#filterString').val())">Filter</a>-->
+                        <!--</div>-->
+                        <!--</div>-->
 
-                <!-- Grid Example -->
-                <div class="row panel">
-                    <div class="large-12 columns">
-                        <form class="custom">
-                            <!--<div class="row">-->
-                            <!--<div class="large-10 columns">-->
-                            <!--<label>Filter</label>-->
-                            <!--<input id="filterString" type="text">-->
-                            <!--</div>-->
+                    </form>
+                    <ul id="messEdit" class="disc">
 
-                            <!--<div class="large-2 columns">-->
-                            <!--<a class="small button" id="filterButton"-->
-                            <!--onclick="websocketclient.filter($('#filterString').val())">Filter</a>-->
-                            <!--</div>-->
-                            <!--</div>-->
-
-                        </form>
-                        <div class="row">
-                            <ul id="messEdit" class="disc">
-
-                            </ul>
-                        </div>
-                    </div>
+                    </ul>
                 </div>
 
             </div>
         </div>
-
+        <!-- Subscriptions -->
         <div class="columns large-4">
+            <div class="row subTop">
+                <div class="large-8 columns">
+                    <h3>Subscriptions</h3>
+                </div>
 
-            <div class="large-8 columns subTop">
-                <h3>Subscriptions</h3>
+                <div class="large-3 columns subArrow">
+                    <a class="small bottom subArrow" onclick="websocketclient.render.toggle('sub');">
+                        <div class="icon-arrow-chevron"></div>
+                    </a>
+                </div>
             </div>
+            <div  id="subMain" class="row panel">
+                <div class="large-12 columns">
+                    <a id="addSubButton" href="#data" class="small button addSubButton">Add New Topic
+                        Subscription</a>
 
-            <div class="large-3 columns subArrow">
-                <a class="small bottom subArrow" onclick="websocketclient.render.toggle('sub');">
-                    <div class="icon-arrow-chevron"></div>
-                </a>
-            </div>
-            <div class="large-12 columns" id="subMain">
-                <div class="row panel">
-                    <div class="large-12 columns">
-
-                        <a id="addSubButton" href="#data" class="small button addSubButton">Add New Topic
-                            Subscription</a>
-
-                        <div style="display:none">
-                            <div id="data">
-                                <form class="custom">
-                                    <div class="row large-12 columns">
-                                        <div class="large-4 columns">
-                                            <label>Color</label>
-                                            <input class="color" id="colorChooser" type="hidden">
-                                        </div>
-                                        <div class="large-5 columns">
-                                            <label for="QoSInput">QoS</label>
-                                            <select id="QoSInput" class="small">
-                                                <option>2</option>
-                                                <option>1</option>
-                                                <option>0</option>
-                                            </select>
-                                        </div>
-                                        <div class="large-3 columns">
-                                            <a class="small button" id="subscribeButton"
-                                               onclick="if(websocketclient.subscribe($('#subscribeTopic').val(),parseInt($('#QoSInput').val()),$('#colorChooser').val().substring(1))){$.fancybox.close();}">Subscribe</a>
-                                        </div>
+                    <div style="display:none">
+                        <div id="data">
+                            <form class="custom">
+                                <div class="row large-12 columns">
+                                    <div class="large-4 columns">
+                                        <label>Color</label>
+                                        <input class="color" id="colorChooser" type="hidden">
                                     </div>
-                                    <div class="row large-12 columns">
-                                        <div class="large-12 columns">
-                                            <label>Topic</label>
-                                            <input id="subscribeTopic" type="text" value="testtopic/#">
-                                        </div>
+                                    <div class="large-5 columns">
+                                        <label for="QoSInput">QoS</label>
+                                        <select id="QoSInput" class="small">
+                                            <option>2</option>
+                                            <option>1</option>
+                                            <option>0</option>
+                                        </select>
                                     </div>
-                                </form>
-                            </div>
+                                    <div class="large-3 columns">
+                                        <a class="small button" id="subscribeButton"
+                                           onclick="if(websocketclient.subscribe($('#subscribeTopic').val(),parseInt($('#QoSInput').val()),$('#colorChooser').val().substring(1))){$.fancybox.close();}">Subscribe</a>
+                                    </div>
+                                </div>
+                                <div class="row large-12 columns">
+                                    <div class="large-12 columns">
+                                        <label>Topic</label>
+                                        <input id="subscribeTopic" type="text" value="testtopic/#">
+                                    </div>
+                                </div>
+                            </form>
                         </div>
-
-                        <ul id="innerEdit" class="disc">
-
-                        </ul>
                     </div>
+
+                    <ul id="innerEdit" class="disc">
+
+                    </ul>
                 </div>
             </div>
         </div>
     </div>
-                    </form>
 </div>
 
 <div class="clearing-container text-center">
     <hr>
     Fork from <a href="http://www.hivemq.com"><img id="headerlogo" src="assets/logo.png"></a>
+    and <a href="http://gis.it.kmitl.ac.th"><img id="faculty-logo" src="assets/itkmitl.jpg"></a>
 </div>
 
 <script src="js/jquery.min.js"></script>
